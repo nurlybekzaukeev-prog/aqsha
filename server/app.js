@@ -4,14 +4,15 @@ const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
 
 // Routes
-const adChatRoutes = require('./routes/ad-chat-routes');
-const adminRoutes = require('./routes/admin-routes');
-const adsRoutes = require('./routes/ads-routes');
-const authRoutes = require('./routes/auth-routes');
-const notificationsRoutes = require('./routes/notifications-routes');
-const ordersRoutes = require('./routes/orders-routes');
-const servicesRoutes = require('./routes/services-routes');
-const walletRoutes = require('./routes/wallet-routes');
+const { adChatRouter } = require('./routes/ad-chat-routes');
+const { adminRouter } = require('./routes/admin-routes');
+const { adsRouter } = require('./routes/ads-routes');
+const { authRouter } = require('./routes/auth-routes');
+const { notificationsRouter } = require('./routes/notifications-routes');
+const { ordersRouter } = require('./routes/orders-routes');
+const { servicesRouter } = require('./routes/services-routes');
+const { walletRouter } = require('./routes/wallet-routes');
+const { streamRouter } = require('./routes/stream-routes');
 
 function createApp() {
   const app = express();
@@ -19,8 +20,9 @@ function createApp() {
   // Middleware
   app.use(helmet());
   app.use(cors({ origin: true, credentials: true }));
-  app.use(express.json());
-  
+  app.use(express.json({ limit: '50mb' }));
+  app.use(express.urlencoded({ limit: '50mb', extended: true }));
+
   // Rate limiting
   const limiter = rateLimit({
     windowMs: 15 * 60 * 1000, // 15 minutes
@@ -32,14 +34,15 @@ function createApp() {
   app.use('/uploads', express.static('uploads'));
 
   // Route registration
-  app.use('/api/ad-chat', adChatRoutes);
-  app.use('/api/admin', adminRoutes);
-  app.use('/api/ads', adsRoutes);
-  app.use('/api/auth', authRoutes);
-  app.use('/api/notifications', notificationsRoutes);
-  app.use('/api/orders', ordersRoutes);
-  app.use('/api/services', servicesRoutes);
-  app.use('/api/wallet', walletRoutes);
+  app.use('/api', adChatRouter);
+  app.use('/api', adminRouter);
+  app.use('/api', adsRouter);
+  app.use('/api', authRouter);
+  app.use('/api', notificationsRouter);
+  app.use('/api', ordersRouter);
+  app.use('/api', servicesRouter);
+  app.use('/api', walletRouter);
+  app.use('/api', streamRouter);
 
   // Basic healthcheck or fallback route
   app.get('/', (req, res) => {

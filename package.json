@@ -8,7 +8,8 @@
     "dev": "cross-env NODE_ENV=development node --watch server/index.js",
     "client:dev": "npm run dev --prefix client",
     "client:build": "npm run build --prefix client",
-    "lint": "npm run lint --prefix client"
+    "lint": "npm run lint --prefix client",
+    "dev:all": "npx concurrently \"npm run dev\" \"npm run client:dev\""
   },
   "keywords": [],
   "author": "",
@@ -26,6 +27,7 @@
     "pg": "^8.20.0"
   },
   "devDependencies": {
+    "concurrently": "^9.2.1",
     "cross-env": "^10.1.0"
   }
 }

@@ -51,14 +51,14 @@ export default function App() {
 
   useEffect(() => {
     getMeta()
-      .then((meta) => {
+      .then((meta: any) => {
         setCategories(meta.categories);
         setDefaultUniversity(meta.defaultUniversity);
       })
       .catch(() => undefined);
 
     getAds({ limit: 6 })
-      .then(setHomeAds)
+      .then((res: any) => setHomeAds(res.ads))
       .catch(() => setHomeAds([]));
   }, []);
 
@@ -80,7 +80,7 @@ export default function App() {
       });
 
     getUnreadCount(token)
-      .then((data) => setNotificationsCount(data.count))
+      .then((data: any) => setNotificationsCount(data.count))
       .catch(() => setNotificationsCount(0));
   }, [token]);
 
@@ -125,7 +125,7 @@ export default function App() {
       return;
     }
     getUnreadCount(token)
-      .then((data) => setNotificationsCount(data.count))
+      .then((data: any) => setNotificationsCount(data.count))
       .catch(() => setNotificationsCount(0));
   }, [token]);
 
@@ -151,7 +151,7 @@ export default function App() {
           <Route path="/orders" element={<OrdersPage token={token} />} />
           <Route path="/orders/:id" element={<OrderDetailsPage token={token} user={user} />} />
           <Route path="/notifications" element={<NotificationsPage token={token} onRefresh={refreshNotifications} />} />
-          <Route path="/wallet" element={<WalletPage token={token} user={user} updateUser={(updates) => setUser((prev) => (prev ? { ...prev, ...updates } : null))} />} />
+          <Route path="/wallet" element={<WalletPage token={token} user={user} updateUser={(updates: any) => setUser((prev) => (prev ? { ...prev, ...updates } : null))} />} />
           <Route path="/admin/ads" element={<AdminAdsPage token={token} user={user} />} />
           <Route
             path="/publish"
